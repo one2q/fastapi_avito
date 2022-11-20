@@ -11,6 +11,6 @@ class Advert(Base):
     price = Column(Float, nullable=False)
     main_foto = Column(String, nullable=False)
     describe = Column(String(1000))
-    foto = Column(String)  # TODO Придумать как реализовать не более 3x ссылок
+    foto = Column(String)
     created = Column(DateTime, nullable=False, default=func.now())
     updated = Column(DateTime, default=func.now(), onupdate=func.now())

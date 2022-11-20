@@ -1,24 +1,25 @@
+from datetime import datetime
+
 from pydantic import BaseModel
-from pydantic.dataclasses import dataclass
 
 
-class AdvertBase(BaseModel):
+class AdvertBaseSchema(BaseModel):
 	name: str
 	price: float
 	main_foto: str
-	created: str
+	describe: str | None
+	foto: str | None
+	updated: datetime | None
+	created: datetime | None
+
+	class Config:
+		orm_mode = True
 
 
-class AdvertCreate(AdvertBase):
+class AdvertCreateSchema(AdvertBaseSchema):
 	pass
 
 
-class Config:
-	orm_mode = True
-
-
-@dataclass(config=Config)
-class Advert(AdvertBase):
+class AdvertListSchema(AdvertBaseSchema):
 	id: int
-	foto: str
-	updated: str   # TODO (from pydantic.schema import datetime) возможно так правильнее datetime.datetime
+

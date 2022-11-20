@@ -8,8 +8,13 @@ def get_adverts(db: Session):
 	return db.query(model.Advert).all()
 
 
-def create_adverts(db: Session, advert: schema.AdvertCreate):
-	db_advert = model.Advert(name=advert.name, price=advert.price, main_foto=advert.main_foto)
+def get_adverts_by_id(db: Session, adverts_id: int):
+	return db.query(model.Advert).filter(model.Advert.id == adverts_id).first()
+
+
+def create_adverts(db: Session, item: schema.AdvertCreateSchema):
+	db_advert = model.Advert(**item.dict())
 	db.add(db_advert)
 	db.commit()
+	db.refresh(db_advert)
 	return db_advert.id
