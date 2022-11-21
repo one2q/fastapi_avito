@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, datetime_parse
 
 
 class AdvertBaseSchema(BaseModel):
@@ -9,8 +9,8 @@ class AdvertBaseSchema(BaseModel):
 	main_foto: str
 	describe: str | None
 	foto: str | None
-	updated: datetime | None
-	created: datetime | None
+	updated: datetime
+	created: datetime
 
 	class Config:
 		orm_mode = True
@@ -20,6 +20,10 @@ class AdvertCreateSchema(AdvertBaseSchema):
 	pass
 
 
-class AdvertListSchema(AdvertBaseSchema):
+class AdvertSchema(AdvertBaseSchema):
 	id: int
+
+
+class AdvertListSchema(AdvertSchema):
+	pass
 

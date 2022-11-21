@@ -8,7 +8,7 @@ model.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-
+# TODO почитать про это и разобраться
 @app.middleware("http")
 async def db_session_middleware(request: Request, call_next):
 	response = Response("Internal server error", status_code=500)
@@ -39,11 +39,12 @@ def get_adverts(db: Session = Depends(get_db)):
 	return result
 
 
-@app.get('/adverts/{adverts_id}', response_model=schema.AdvertListSchema)
-def get_adverts_by_id(db: Session = Depends(get_db), adverts_id: int = schema.AdvertListSchema):
+@app.get('/adverts/{adverts_id}', response_model=schema.AdvertSchema)
+def get_adverts_by_id(db: Session = Depends(get_db), adverts_id: int = schema.AdvertSchema):
 	return crud.get_adverts_by_id(db, adverts_id)
 
 
-@app.post('/adverts/', response_model=schema.AdvertListSchema)
+@app.post('/adverts/', status_code=201)
 def create_advert(advert: schema.AdvertCreateSchema, db: Session = Depends(get_db)):
-	return crud.create_adverts(db=db, item=advert)
+	new_advert = crud.create_adverts(db=db, item=advert)
+	return {'advert_id': new_advert.id}

@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from fastapi.encoders import jsonable_encoder
 
 import model
 import schema
@@ -17,4 +18,4 @@ def create_adverts(db: Session, item: schema.AdvertCreateSchema):
 	db.add(db_advert)
 	db.commit()
 	db.refresh(db_advert)
-	return db_advert.id
+	return db_advert
