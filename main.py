@@ -2,11 +2,13 @@ from fastapi import Depends, FastAPI, Request, Response, APIRouter
 from sqlalchemy.orm import Session
 
 import crud, model, schema
+from dao import AdvertDAO
 from db import SessionLocal, engine
 
 model.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
 
 # TODO почитать про это и разобраться
 @app.middleware("http")
@@ -25,6 +27,7 @@ async def db_session_middleware(request: Request, call_next):
 def get_db(request: Request):
 	return request.state.db
 
+
 # def get_db():
 # 	db = SessionLocal()
 # 	try:
@@ -33,9 +36,10 @@ def get_db(request: Request):
 # 		db.close()
 
 
-@app.get('/adverts/', response_model=list[schema.AdvertListSchema])
-def get_adverts(db: Session = Depends(get_db)):
-	result = crud.get_adverts(db)
+@app.get('/adverts/', response_model=list[schema.AdvertSchema])
+def get_adverts(db: Session = Depends(get_db), page: int = 1,
+                price: bool | None = None, created_at: bool | None = None):
+	result = crud.get_adverts(db, page, price, created_at)
 	return result
 
 
@@ -48,3 +52,8 @@ def get_adverts_by_id(db: Session = Depends(get_db), adverts_id: int = schema.Ad
 def create_advert(advert: schema.AdvertCreateSchema, db: Session = Depends(get_db)):
 	new_advert = crud.create_adverts(db=db, item=advert)
 	return {'advert_id': new_advert.id}
+
+
+# @app.get('/', response_model=list[schema.AdvertSchema])
+# def get_all_adverts():
+# 	return advert_dao.get_all()
