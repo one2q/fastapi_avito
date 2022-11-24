@@ -1,6 +1,4 @@
-from datetime import datetime
-
-from pydantic import BaseModel, datetime_parse
+from pydantic import BaseModel, HttpUrl
 
 
 class AdvertBaseSchema(BaseModel):

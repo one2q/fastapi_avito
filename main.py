@@ -2,7 +2,6 @@ from fastapi import Depends, FastAPI, Request, Response, APIRouter
 from sqlalchemy.orm import Session
 
 import crud, model, schema
-from dao import AdvertDAO
 from db import SessionLocal, engine
 
 model.Base.metadata.create_all(bind=engine)
@@ -52,8 +51,3 @@ def get_adverts_by_id(db: Session = Depends(get_db), adverts_id: int = schema.Ad
 def create_advert(advert: schema.AdvertCreateSchema, db: Session = Depends(get_db)):
 	new_advert = crud.create_adverts(db=db, item=advert)
 	return {'advert_id': new_advert.id}
-
-
-# @app.get('/', response_model=list[schema.AdvertSchema])
-# def get_all_adverts():
-# 	return advert_dao.get_all()
